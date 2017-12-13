@@ -12,4 +12,7 @@
 
 void GPIO_Conf();
 
+void UR_DO0_IRQHandler(void);
+void UR_DO1_IRQHandler(void);
+
 #endif /* GPIO_H_ */

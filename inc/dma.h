@@ -12,4 +12,6 @@
 
 void DMA_Conf();
 
+void DMA1_Channel4_5_IRQHandler(void);
+
 #endif /* DMA_H_ */
