@@ -8,6 +8,8 @@
 #ifndef SYSTEM_CONF_H_
 #define SYSTEM_CONF_H_
 
+#define TestSetup
+
 #include "stm32f0xx.h"
 
 #include "stm32f0xx_ll_adc.h"
@@ -68,5 +70,16 @@
 #define FT232_RX_Pin				LL_GPIO_PIN_10
 #define FT232_Port					GPIOA
 #define FT232_GPIO_AF				LL_GPIO_AF_1
+
+__STATIC_INLINE void ErrorIndicatorEnable()
+{
+	LL_SYSTICK_EnableIT();
+}
+
+__STATIC_INLINE void ErrorIndicatorDisable()
+{
+	LL_SYSTICK_DisableIT();
+	LL_GPIO_ResetOutputPin(LED_Port, LED3_Pin);
+}
 
 #endif /* SYSTEM_CONF_H_ */

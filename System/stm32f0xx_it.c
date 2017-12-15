@@ -25,13 +25,3 @@
 /******************************************************************************/
 /*            	  	    Processor Exceptions Handlers                         */
 /******************************************************************************/
-
-/**
-  * @brief  This function handles SysTick Handler, but only if no RTOS defines it.
-  * @param  None
-  * @retval None
-  */
-void SysTick_Handler(void)
-{
-
-}

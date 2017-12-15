@@ -12,17 +12,30 @@
 
 int main(void)
 {
+	MotorDriver_Polling = MotorDriver_List;
+#ifdef TestSetup
+	MotorDriver_List[0].Address = 0x01;
+#endif
+
+	for(int i=0; i<MotorDriver_Count; i++)
+	{
+		MotorDriver_List[i].PWM = 0;
+		MotorDriver_List[i].Direction = Dir_Positive;
+		MotorDriver_List[i].FreeDrive = FreeDrive_DIS;
+		MotorDriver_List[i].Current = 0;
+		MotorDriver_List[i].Position = 0;
+	}
+
 	Init();
 
+	SysTick_Conf();
 	GPIO_Conf();
 	CRC_Conf();
 	DMA_Conf();
 	TIM_Conf();
 	USART_Conf();
 
-	LL_GPIO_SetOutputPin(LED_Port, LED1_Pin);
-
-	static uint8_t USART_TX_ToEncode[24];
+	/*static uint8_t USART_TX_ToEncode[24];
 	static uint8_t USART_TX_Encoded_Len;
 
 	int i = 10000;
@@ -46,9 +59,7 @@ int main(void)
 
 	LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_4, USART_TX_Encoded_Len); //start USART_TX transfer
 	LL_GPIO_SetOutputPin(RS485_DRV_EN_Port, RS485_DRV_EN_Pin);
-	LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_4);
-
-	LL_GPIO_SetOutputPin(LED_Port, LED2_Pin);
+	LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_4);*/
 
 	while(1)
 	{

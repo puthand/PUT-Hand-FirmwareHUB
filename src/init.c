@@ -48,12 +48,5 @@ void SystemClock_Config(void)
    /* Wait till System clock is ready */
   while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_PLL);
 
-  LL_Init1msTick(48000000);
-
-  LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
-
   LL_SetSystemCoreClock(48000000);
-
-  /* SysTick_IRQn interrupt configuration */
-  NVIC_SetPriority(SysTick_IRQn, 0);
 }

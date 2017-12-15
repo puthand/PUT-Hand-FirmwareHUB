@@ -16,5 +16,6 @@
 #include "gpio.h"
 #include "tim.h"
 #include "usart.h"
+#include "systick.h"
 
 #endif /* MAIN_H_ */

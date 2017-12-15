@@ -19,8 +19,7 @@ void USART_Conf()
 	USART_RS485();
 }
 
-static uint8_t USART_RS485_RX_buffer[USART_RS485_MaxBufferSize];
-static uint8_t USART_RS485_RX_Ptr;
+static volatile uint8_t USART_RS485_RX_buffer[USART_RS485_MaxBufferSize];
 
 static void USART_RS485()
 {
@@ -38,7 +37,7 @@ static void USART_RS485()
 	LL_USART_DisableOverrunDetect(USART2);
 	LL_USART_ConfigAsyncMode(USART2);
 
-	NVIC_SetPriority(USART2_IRQn, 1);
+	NVIC_SetPriority(USART2_IRQn, 2);
 	NVIC_EnableIRQ(USART2_IRQn);
 
 	LL_USART_EnableDMAReq_TX(USART2);
@@ -48,8 +47,8 @@ static void USART_RS485()
 	LL_USART_Enable(USART2);
 }
 
-static uint8_t USART_RS485_RX_Decoded[USART_RS485_b64BufferSize];
-static uint8_t USART_RS485_RX_Decoded_Len;
+static volatile uint8_t USART_RS485_RX_Decoded[USART_RS485_b64BufferSize];
+static volatile uint8_t USART_RS485_RX_Decoded_Len;
 
 void USART2_IRQHandler(void)
 {
@@ -75,14 +74,28 @@ void USART2_IRQHandler(void)
 
 						if(USART_RS485_RX_Decoded[USART_RS485_RX_Decoded_Len - 1] == (uint8_t)LL_CRC_ReadData32(CRC)) //if CRC is ok
 						{
-							volatile int i = 0;
-							i = 1;
-							//disable safety waiting timer
+							LL_TIM_DisableCounter(TIM15);
+							USART_RS485_WaitResponse_Flag = 0;//enable further polling operation
 
-							//DO SHIT
+							switch(USART_RS485_RX_Decoded[1])//CMD
+							{
+								case SET_PWM_: //new status
+								case GET_STATE_:
+									((uint8_t*)&(MotorDriver_Polling->Current))[0] = USART_RS485_RX_Decoded[2];
+									((uint8_t*)&(MotorDriver_Polling->Current))[1] = USART_RS485_RX_Decoded[3];
+									((uint8_t*)&(MotorDriver_Polling->Position))[0] = USART_RS485_RX_Decoded[4];
+									((uint8_t*)&(MotorDriver_Polling->Position))[1] = USART_RS485_RX_Decoded[5];
+									break;
+								case CALIBRATE_:
+									break;
+							}
+						}else
+						{
+							LL_GPIO_SetOutputPin(LED_Port, LED2_Pin);
 						}
-
-
+					}else if(USART_RS485_RX_Decoded[0] != 1)
+					{
+						LL_GPIO_SetOutputPin(LED_Port, LED1_Pin);
 					}
 				}
 			}
