@@ -71,15 +71,14 @@
 #define FT232_Port					GPIOA
 #define FT232_GPIO_AF				LL_GPIO_AF_1
 
-__STATIC_INLINE void ErrorIndicatorEnable()
+__STATIC_INLINE void ErrorIndicatorEnable(ErrorIndicator_Type Error)
 {
-	LL_SYSTICK_EnableIT();
+	CurrentErrorType |= Error;
 }
 
-__STATIC_INLINE void ErrorIndicatorDisable()
+__STATIC_INLINE void ErrorIndicatorDisable(ErrorIndicator_Type Error)
 {
-	LL_SYSTICK_DisableIT();
-	LL_GPIO_ResetOutputPin(LED_Port, LED3_Pin);
+	CurrentErrorType &= ~Error;
 }
 
 #endif /* SYSTEM_CONF_H_ */

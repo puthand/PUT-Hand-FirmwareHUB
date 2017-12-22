@@ -14,5 +14,6 @@ void TIM_Conf();
 
 void TIM14_IRQHandler(void);
 void TIM15_IRQHandler(void);
+void TIM16_IRQHandler(void);
 
 #endif /* TIM_H_ */

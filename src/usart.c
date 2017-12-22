@@ -25,13 +25,13 @@ static void USART_RS485()
 {
 	USART_RS485_RX_Ptr = 0;
 
-	USART_InitStruct.BaudRate = 1000000;
+	USART_InitStruct.BaudRate = 500000;
 	USART_InitStruct.DataWidth = LL_USART_DATAWIDTH_8B;
-	USART_InitStruct.StopBits = LL_USART_STOPBITS_1;
+	USART_InitStruct.StopBits = LL_USART_STOPBITS_2;
 	USART_InitStruct.Parity = LL_USART_PARITY_NONE;
 	USART_InitStruct.TransferDirection = LL_USART_DIRECTION_TX_RX;
 	USART_InitStruct.HardwareFlowControl = LL_USART_HWCONTROL_NONE;
-	USART_InitStruct.OverSampling = LL_USART_OVERSAMPLING_8;
+	USART_InitStruct.OverSampling = LL_USART_OVERSAMPLING_16;
 	LL_USART_Init(USART2, &USART_InitStruct);
 
 	LL_USART_DisableOverrunDetect(USART2);
@@ -83,19 +83,18 @@ void USART2_IRQHandler(void)
 								case GET_STATE_:
 									((uint8_t*)&(MotorDriver_Polling->Current))[0] = USART_RS485_RX_Decoded[2];
 									((uint8_t*)&(MotorDriver_Polling->Current))[1] = USART_RS485_RX_Decoded[3];
-									((uint8_t*)&(MotorDriver_Polling->Position))[0] = USART_RS485_RX_Decoded[4];
-									((uint8_t*)&(MotorDriver_Polling->Position))[1] = USART_RS485_RX_Decoded[5];
+									((uint8_t*)&(MotorDriver_Polling->PositionCurrent))[0] = USART_RS485_RX_Decoded[4];
+									((uint8_t*)&(MotorDriver_Polling->PositionCurrent))[1] = USART_RS485_RX_Decoded[5];
+									MotorDriver_Polling->Operation = USART_RS485_RX_Decoded[6];
+									if(MotorDriver_Polling->Operation == Operation_Fault)
+									{
+										ErrorIndicatorEnable(ERROR_MOTOR_FAULT);
+									}
 									break;
 								case CALIBRATE_:
 									break;
 							}
-						}else
-						{
-							LL_GPIO_SetOutputPin(LED_Port, LED2_Pin);
 						}
-					}else if(USART_RS485_RX_Decoded[0] != 1)
-					{
-						LL_GPIO_SetOutputPin(LED_Port, LED1_Pin);
 					}
 				}
 			}
@@ -112,15 +111,10 @@ void USART2_IRQHandler(void)
 
 	if(LL_USART_IsActiveFlag_TXE(USART2) && LL_USART_IsEnabledIT_TXE(USART2))
 	{
-		LL_USART_DisableIT_TXE(USART2);
-		LL_USART_EnableIT_TC(USART2);
-	}
+		while(!LL_USART_IsActiveFlag_TC(USART2));
 
-	if(LL_USART_IsActiveFlag_TC(USART2) && LL_USART_IsEnabledIT_TC(USART2))
-	{
 		LL_GPIO_ResetOutputPin(RS485_DRV_EN_Port, RS485_DRV_EN_Pin);//disable RS trasmitter
 
-		LL_USART_ClearFlag_TC(USART2);
-		LL_USART_DisableIT_TC(USART2);
+		LL_USART_DisableIT_TXE(USART2);
 	}
 }
