@@ -16,12 +16,25 @@ typedef enum
 }USART_RS485_CMD;
 
 #define USART_RS485_MaxBufferSize			32
-#define USART_RS485_b64BufferSize			USART_RS485_MaxBufferSize * 6 / 8
-
+#define USART_RS485_DecodedBufferSize		USART_RS485_MaxBufferSize * 6 / 8
+volatile uint8_t USART_RS485_RX_buffer[USART_RS485_MaxBufferSize];
 volatile uint8_t USART_RS485_TX_buffer[USART_RS485_MaxBufferSize];
 volatile uint8_t USART_RS485_RX_Ptr;
+volatile uint8_t USART_RS485_RX_Decoded[USART_RS485_DecodedBufferSize];
+volatile uint8_t USART_RS485_RX_Decoded_Len;
 
-volatile uint8_t USART_RS485_WaitResponse_Flag;
+
+typedef enum{
+	USART_RS485_State_WAITING,
+	USART_RS485_State_TIMEOUT,
+	USART_RS485_State_NEWPACKET
+}USART_RS485_State_Typedef;
+volatile USART_RS485_State_Typedef USART_RS485_State;
+
+#define USART_FT232_MaxBufferSize			200
+#define USART_FT232_DecodedBufferSize		USART_FT232_MaxBufferSize * 6 / 8
+volatile uint8_t USART_FT232_TX_buffer[USART_FT232_MaxBufferSize];
+volatile uint16_t USART_FT232_TX_Ptr;
 
 typedef enum
 {
@@ -43,8 +56,8 @@ typedef enum
 
 typedef enum
 {
-	Operation_OK = 0x01,
-	Operation_Fault = 0x02
+	Operation_OK = 0x00,
+	Operation_Fault = 0x04
 }Operation_State;
 
 typedef struct
@@ -58,20 +71,32 @@ typedef struct
 	uint16_t				PositionSet;
 	Operation_State			Operation;
 	ResetFaultFlag_State	ResetFaultFlag;
+
+	int32_t					PID_Kp;
+	int32_t					PID_Ki;
+	int32_t					PID_Kd;
+	int32_t					PID_Integral;
+	int32_t					PID_PrevErr;
 }MotorDriver_Values_TypeDef;
 
-#ifdef TestSetup
-#define MotorDriver_Count					3
+
+#ifdef TestSetup_1
+#define MotorDriver_Count					1
 #endif
+
+#ifdef TestSetup_9
+#define MotorDriver_Count					9
+#endif
+
 volatile MotorDriver_Values_TypeDef MotorDriver_List[MotorDriver_Count];
 volatile MotorDriver_Values_TypeDef* MotorDriver_Polling;
 
 typedef enum
 {
 	ERROR_OK = 0x00,
-	ERROR_TIMEOUT = 0x01,
+	ERROR_RS485_TIMEOUT = 0x01,
 	ERROR_MOTOR_FAULT = 0x02,
-	ERROR_CRC = 0x04,
+	ERROR_RS485_CRC = 0x04,
 }ErrorIndicator_Type;
 
 ErrorIndicator_Type CurrentErrorType;
@@ -92,10 +117,24 @@ typedef enum{
 SystemOperationMode_Type SystemOperationMode;
 
 typedef enum{
-	CALIBRATION_None,
+	CALIBRATION_Disabled,
 	CALIBRATION_Perform
 }CalibrationProcedure_Type;
 
 volatile CalibrationProcedure_Type CalibrationProcedure;
+
+typedef enum{
+	SendSatusToPC_DISABLED,
+	SendSatusToPC_ENABLED,
+}SendSatusToPC_Type;
+
+volatile SendSatusToPC_Type SendSatusToPC;
+
+typedef enum{
+	SendingStatusState_SEND,
+	SendingStatusState_SENDING,
+}SendingStatusState_Type;
+
+volatile SendingStatusState_Type SendingStatusState;
 
 #endif /* SYSTEM_VARS_H_ */

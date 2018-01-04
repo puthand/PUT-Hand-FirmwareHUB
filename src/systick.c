@@ -19,12 +19,12 @@ void SysTick_Conf()
 
 void SysTick_Handler(void)
 {
-	if(CurrentErrorType & ERROR_CRC)
+	if(CurrentErrorType & ERROR_RS485_CRC)
 	{
 		LL_GPIO_TogglePin(LED_Port, LED1_Pin);
 	}
 
-	if(CurrentErrorType & ERROR_TIMEOUT)
+	if(CurrentErrorType & ERROR_RS485_TIMEOUT)
 	{
 		LL_GPIO_TogglePin(LED_Port, LED2_Pin);
 	}

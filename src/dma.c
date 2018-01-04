@@ -31,7 +31,7 @@ void DMA_USART_RS485()
 	DMA_InitStruct.Priority = LL_DMA_PRIORITY_HIGH;
 	LL_DMA_Init(DMA1, LL_DMA_CHANNEL_4, &DMA_InitStruct);
 
-	NVIC_SetPriority(DMA1_Channel4_5_IRQn, 2);
+	NVIC_SetPriority(DMA1_Channel4_5_IRQn, 0);
 	NVIC_EnableIRQ(DMA1_Channel4_5_IRQn);
 
 	LL_DMA_EnableIT_HT(DMA1, LL_DMA_CHANNEL_4);

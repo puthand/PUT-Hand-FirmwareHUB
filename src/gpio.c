@@ -66,7 +66,7 @@ void GPIO_UR()
 	EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_RISING_FALLING;
 	LL_EXTI_Init(&EXTI_InitStruct);
 
-	NVIC_SetPriority(UR_DO0_IRQn, 1);
+	NVIC_SetPriority(UR_DO0_IRQn, 3);
 	NVIC_EnableIRQ(UR_DO0_IRQn);
 
 	LL_EXTI_EnableIT_0_31(UR_DO0_EXTI_Line);
@@ -79,7 +79,7 @@ void GPIO_UR()
 	EXTI_InitStruct.Line_0_31 = UR_DO1_EXTI_Line;
 	LL_EXTI_Init(&EXTI_InitStruct);
 
-	NVIC_SetPriority(UR_DO1_IRQn, 1);
+	NVIC_SetPriority(UR_DO1_IRQn, 3);
 	NVIC_EnableIRQ(UR_DO1_IRQn);
 
 	LL_EXTI_EnableIT_0_31(UR_DO1_EXTI_Line);

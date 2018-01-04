@@ -8,7 +8,7 @@
 #ifndef SYSTEM_CONF_H_
 #define SYSTEM_CONF_H_
 
-#define TestSetup
+#define TestSetup_9
 
 #include "stm32f0xx.h"
 
