@@ -33,21 +33,21 @@ int main(void)
 	{
 		MotorDriver_List[i].PWM = 0;
 		MotorDriver_List[i].Direction = Dir_Positive;
-		MotorDriver_List[i].FreeDrive = FreeDrive_EN;
+		MotorDriver_List[i].FreeDrive = FreeDrive_DIS;
 		MotorDriver_List[i].Current = 0;
 		MotorDriver_List[i].PositionCurrent = 0;
 		MotorDriver_List[i].PositionSet = 20000;
-		MotorDriver_List[i].Operation = Operation_OK;
+		MotorDriver_List[i].MotorDriverOperation = Operation_OK;
 		MotorDriver_List[i].ResetFaultFlag = FaultFlag_Keep;
+
 		MotorDriver_List[i].PID_Integral = 0;
 		MotorDriver_List[i].PID_PrevErr = 0;
-
 		MotorDriver_List[i].PID_Kp = 1000;
 		MotorDriver_List[i].PID_Ki = 50;
 		MotorDriver_List[i].PID_Kd = 1000;
 	}
 
-	CurrentErrorType = ERROR_OK;
+	CurrentError = ERROR_OK;
 	CalibrationProcedure = CALIBRATION_Disabled;
 	SystemOperationMode = MODE_IDLE;
 	SendSatusToPC = SendSatusToPC_DISABLED;
@@ -64,10 +64,10 @@ int main(void)
 	TIM_Conf();
 	USART_Conf();
 
-	SystemOperationMode = MODE_INT_REGULATOR;
+	//SystemOperationMode = MODE_INT_REGULATOR;
 	//CalibrationProcedure = CALIBRATION_Perform;
 
-	SendSatusToPC = SendSatusToPC_ENABLED;
+	//SendSatusToPC = SendSatusToPC_ENABLED;
 
 	while(1)
 	{

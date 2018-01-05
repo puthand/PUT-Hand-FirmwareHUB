@@ -70,14 +70,14 @@
 #define FT232_Port					GPIOA
 #define FT232_GPIO_AF				LL_GPIO_AF_1
 
-__STATIC_INLINE void ErrorIndicatorEnable(ErrorIndicator_Type Error)
+__STATIC_INLINE void ErrorIndicatorEnable(CurrentError_Type Error)
 {
-	CurrentErrorType |= Error;
+	CurrentError |= Error;
 }
 
-__STATIC_INLINE void ErrorIndicatorDisable(ErrorIndicator_Type Error)
+__STATIC_INLINE void ErrorIndicatorDisable(CurrentError_Type Error)
 {
-	CurrentErrorType &= ~Error;
+	CurrentError &= ~Error;
 }
 
 #endif /* SYSTEM_CONF_H_ */

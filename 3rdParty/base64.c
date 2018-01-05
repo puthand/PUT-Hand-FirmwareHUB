@@ -15,9 +15,6 @@ uint8_t b64_int(uint8_t ch) ;
 //Base64 char table - used internally for encoding
 uint8_t b64_chr[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-
-
-
 uint8_t b64_encode(uint8_t* in, uint8_t in_len, uint8_t* out) {
 
 	unsigned int i=0, j=0, k=0, s[3];

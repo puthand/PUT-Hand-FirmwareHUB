@@ -28,8 +28,8 @@ typedef enum{
 	USART_RS485_State_WAITING,
 	USART_RS485_State_TIMEOUT,
 	USART_RS485_State_NEWPACKET
-}USART_RS485_State_Typedef;
-volatile USART_RS485_State_Typedef USART_RS485_State;
+}USART_RS485_State_Type;
+volatile USART_RS485_State_Type USART_RS485_State;
 
 #define USART_FT232_MaxBufferSize			200
 #define USART_FT232_DecodedBufferSize		USART_FT232_MaxBufferSize * 6 / 8
@@ -40,44 +40,44 @@ typedef enum
 {
 	FreeDrive_EN  = 0x01,
 	FreeDrive_DIS = 0x00
-}FreeDrive_State;
+}FreeDrive_Type;
 
 typedef enum
 {
-	Dir_Positive =  0x02,
+	Dir_Positive = 0x02,
 	Dir_Negative = 0x00
-}Direction_State;
+}Direction_Type;
 
 typedef enum
 {
 	FaultFlag_Keep = 0x00,
 	FaultFlag_Reset = 0x04
-}ResetFaultFlag_State;
+}ResetFaultFlag_Type;
 
 typedef enum
 {
 	Operation_OK = 0x00,
 	Operation_Fault = 0x04
-}Operation_State;
+}MotorDriverOperation_Type;
 
 typedef struct
 {
-	uint8_t 				Address;
-	uint16_t 				PWM;
-	Direction_State			Direction;
-	FreeDrive_State			FreeDrive;
-	uint16_t				Current;
-	uint16_t				PositionCurrent;
-	uint16_t				PositionSet;
-	Operation_State			Operation;
-	ResetFaultFlag_State	ResetFaultFlag;
+	uint8_t 					Address;
+	uint16_t 					PWM;
+	Direction_Type				Direction;
+	FreeDrive_Type				FreeDrive;
+	uint16_t					Current;
+	uint16_t					PositionCurrent;
+	uint16_t					PositionSet;
+	MotorDriverOperation_Type	MotorDriverOperation;
+	ResetFaultFlag_Type			ResetFaultFlag;
 
-	int32_t					PID_Kp;
-	int32_t					PID_Ki;
-	int32_t					PID_Kd;
-	int32_t					PID_Integral;
-	int32_t					PID_PrevErr;
-}MotorDriver_Values_TypeDef;
+	int32_t						PID_Kp;
+	int32_t						PID_Ki;
+	int32_t						PID_Kd;
+	int32_t						PID_Integral;
+	int32_t						PID_PrevErr;
+}MotorDriver_Type;
 
 
 #ifdef TestSetup_1
@@ -88,8 +88,8 @@ typedef struct
 #define MotorDriver_Count					9
 #endif
 
-volatile MotorDriver_Values_TypeDef MotorDriver_List[MotorDriver_Count];
-volatile MotorDriver_Values_TypeDef* MotorDriver_Polling;
+volatile MotorDriver_Type MotorDriver_List[MotorDriver_Count];
+volatile MotorDriver_Type* MotorDriver_Polling;
 
 typedef enum
 {
@@ -97,9 +97,10 @@ typedef enum
 	ERROR_RS485_TIMEOUT = 0x01,
 	ERROR_MOTOR_FAULT = 0x02,
 	ERROR_RS485_CRC = 0x04,
-}ErrorIndicator_Type;
+	ERROR_FT232_CRC = 0x08,
+}CurrentError_Type;
 
-ErrorIndicator_Type CurrentErrorType;
+CurrentError_Type CurrentError;
 
 #define TIM_MotorPolling_WatchDog_Prescaler			191 //Inc 250 000 Hz
 #define TIM_MotorPolling_WatchDog_Period			249 //Rel 249 = 1 ms = 1000 Hz
@@ -136,5 +137,16 @@ typedef enum{
 }SendingStatusState_Type;
 
 volatile SendingStatusState_Type SendingStatusState;
+
+typedef enum
+{
+    FT232_CMD_EnableStatusUpdate = 0x01,
+    FT232_CMD_DisableStatusUpdate = 0x02,
+    FT232_CMD_CalibrationProcedureEnable = 0x03,
+    FT232_CMD_ResetErrors = 0x04,
+    FT232_CMD_IdleMode = 0x05,
+    FT232_CMD_IntRegulatorMode = 0x06,
+    FT232_CMD_ExtRegulatorMode = 0x07
+}FT232_CMD_Type;
 
 #endif /* SYSTEM_VARS_H_ */

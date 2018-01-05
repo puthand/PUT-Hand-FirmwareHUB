@@ -62,7 +62,7 @@ void USART_FT232()
 	USART_FT232_RX_Ptr = 0;
 	USART_FT232_TX_Ptr = 0;
 
-	USART_InitStruct.BaudRate = 1000000;
+	USART_InitStruct.BaudRate = 921600;
 	USART_InitStruct.DataWidth = LL_USART_DATAWIDTH_8B;
 	USART_InitStruct.StopBits = LL_USART_STOPBITS_1;
 	USART_InitStruct.Parity = LL_USART_PARITY_NONE;
@@ -124,7 +124,35 @@ void USART1_IRQHandler(void)
 			{
 				USART_FT232_RX_Decoded_Len = b64_decode(USART_FT232_RX_buffer, USART_FT232_RX_Ptr, USART_FT232_RX_Decoded);
 
-				//DO SHIT
+				if(USART_FT232_RX_Decoded_Len >= 2)//if any payload avaiable
+				{
+					uint8_t CrcVal = 0x00;
+					for(int i=0; i < USART_FT232_RX_Decoded_Len-1; i++)
+					{
+						CrcVal = CRC8_CCITT_Calc(CrcVal, USART_FT232_RX_Decoded[i]);
+					}
+
+					if(USART_FT232_RX_Decoded[USART_FT232_RX_Decoded_Len-1] == CrcVal)//if CRC correct
+					{
+						switch(USART_FT232_RX_Decoded[0])
+						{
+							case FT232_CMD_EnableStatusUpdate:
+								SendSatusToPC = SendSatusToPC_ENABLED;
+								break;
+
+							case FT232_CMD_DisableStatusUpdate:
+								SendSatusToPC = SendSatusToPC_DISABLED;
+								break;
+
+							case FT232_CMD_CalibrationProcedureEnable:
+								CalibrationProcedure = CALIBRATION_Perform;
+								break;
+						}
+					}else
+					{
+						ErrorIndicatorEnable(ERROR_FT232_CRC);
+					}
+				}
 			}
 
 			USART_FT232_RX_Ptr = 0;
@@ -137,18 +165,4 @@ void USART1_IRQHandler(void)
 			}
 		}
 	}
-
-	/*while(LL_USART_IsActiveFlag_TXE(USART1))
-	{
-		LL_USART_TransmitData8(USART1, USART_FT232_TX_buffer[USART_FT232_TX_Ptr]);
-
-		if(USART_FT232_TX_buffer[USART_FT232_TX_Ptr] == '\n' || USART_FT232_TX_Ptr >= (USART_FT232_MaxBufferSize-1))
-		{
-			LL_USART_DisableIT_TXE(USART1);
-			SendingStatusState = SendingStatusState_SEND;
-			break;
-		}
-
-		USART_FT232_TX_Ptr++;
-	}*/
 }

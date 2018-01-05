@@ -215,8 +215,8 @@ void TIM14_IRQHandler(void)//TIM_MotorPolling and Internal regulator
 										((uint8_t*)&(MotorDriver_Polling->Current))[1] = USART_RS485_RX_Decoded[3];
 										((uint8_t*)&(MotorDriver_Polling->PositionCurrent))[0] = USART_RS485_RX_Decoded[4];
 										((uint8_t*)&(MotorDriver_Polling->PositionCurrent))[1] = USART_RS485_RX_Decoded[5];
-										MotorDriver_Polling->Operation = USART_RS485_RX_Decoded[6];
-										if(MotorDriver_Polling->Operation == Operation_Fault)
+										MotorDriver_Polling->MotorDriverOperation = USART_RS485_RX_Decoded[6];
+										if(MotorDriver_Polling->MotorDriverOperation == Operation_Fault)
 										{
 											ErrorIndicatorEnable(ERROR_MOTOR_FAULT);
 										}
@@ -271,7 +271,7 @@ void TIM15_IRQHandler(void)//TIM_MotorPolling_WatchDog
 static uint8_t USART_FT232_TX_ToEncode[USART_FT232_DecodedBufferSize];
 static uint16_t USART_FT232_TX_Encoded_Len;
 static uint16_t FT232_TX_Len;
-static MotorDriver_Values_TypeDef* Driver;
+static MotorDriver_Type* Driver;
 
 void TIM17_IRQHandler(void)//TIM_FT232
 {
@@ -279,11 +279,11 @@ void TIM17_IRQHandler(void)//TIM_FT232
 	{
 		LL_TIM_ClearFlag_UPDATE(TIM17);
 
-		if(SendSatusToPC == SendSatusToPC_ENABLED && SendingStatusState == SendingStatusState_SEND)
+		if((SendSatusToPC == SendSatusToPC_ENABLED) && (SendingStatusState == SendingStatusState_SEND))
 		{
 			USART_FT232_TX_ToEncode[0] = SystemOperationMode;
 			USART_FT232_TX_ToEncode[1] = CalibrationProcedure;
-			USART_FT232_TX_ToEncode[2] = CurrentErrorType;
+			USART_FT232_TX_ToEncode[2] = CurrentError;
 			USART_FT232_TX_ToEncode[3] = MotorDriver_Count;
 			FT232_TX_Len = 4;
 
@@ -291,15 +291,15 @@ void TIM17_IRQHandler(void)//TIM_FT232
 			{
 				Driver = &(MotorDriver_List[i]);
 
-				USART_FT232_TX_ToEncode[FT232_TX_Len++] = Driver->FreeDrive | Driver->Direction | Driver->Operation;
+				USART_FT232_TX_ToEncode[FT232_TX_Len++] = Driver->FreeDrive | Driver->Direction | Driver->MotorDriverOperation;
+				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->PWM))[0];
 				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->PWM))[1];
-				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->PWM))[2];
+				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->PositionSet))[0];
 				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->PositionSet))[1];
-				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->PositionSet))[2];
+				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->PositionCurrent))[0];
 				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->PositionCurrent))[1];
-				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->PositionCurrent))[2];
+				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->Current))[0];
 				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->Current))[1];
-				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->Current))[2];
 			}
 
 			uint8_t CrcVal = 0x00;
@@ -317,10 +317,6 @@ void TIM17_IRQHandler(void)//TIM_FT232
 			SendingStatusState = SendingStatusState_SENDING;
 			LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_2, USART_FT232_TX_Encoded_Len); //start USART_TX transfer
 			LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_2);
-
-			//USART_FT232_TX_Ptr = 0;
-			//SendingStatusState = SendingStatusState_SENDING;
-			//LL_USART_EnableIT_TXE(USART1);
 		}
 	}
 }
