@@ -88,13 +88,9 @@ void GPIO_UR()
 void GPIO_RS485()
 {
 	GPIO_InitStruct.Pin = RS485_DRV_EN_Pin;
-	GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
-	GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
-	GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-	GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
-	LL_GPIO_Init(RS485_DRV_EN_Port, &GPIO_InitStruct);
-
-	LL_GPIO_ResetOutputPin(RS485_DRV_EN_Port, RS485_DRV_EN_Pin);
+	GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
+	GPIO_InitStruct.Alternate = RS485_GPIO_AF;
+	LL_GPIO_Init(RS485_Port, &GPIO_InitStruct);
 
 	GPIO_InitStruct.Pin = RS485_TX_Pin | RS485_RX_Pin;
 	GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;

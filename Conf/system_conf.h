@@ -60,7 +60,6 @@
 #define UR_DO1_IRQHandler			EXTI0_1_IRQHandler
 
 #define RS485_DRV_EN_Pin			LL_GPIO_PIN_1
-#define RS485_DRV_EN_Port			GPIOA
 #define RS485_TX_Pin				LL_GPIO_PIN_2
 #define RS485_RX_Pin				LL_GPIO_PIN_3
 #define RS485_Port					GPIOA

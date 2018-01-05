@@ -42,6 +42,11 @@ static void USART_RS485()
 	NVIC_SetPriority(USART2_IRQn, 0);
 	NVIC_EnableIRQ(USART2_IRQn);
 
+	LL_USART_SetDESignalPolarity(USART2, LL_USART_DE_POLARITY_HIGH);
+	LL_USART_SetDEAssertionTime(USART2, 0);
+	LL_USART_SetDEDeassertionTime(USART2, 0);
+	LL_USART_EnableDEMode(USART2);
+
 	LL_USART_EnableDMAReq_TX(USART2);
 
 	LL_USART_EnableIT_RXNE(USART2);
@@ -72,6 +77,8 @@ void USART_FT232()
 	NVIC_SetPriority(USART1_IRQn, 1);
 	NVIC_EnableIRQ(USART1_IRQn);
 
+	LL_USART_EnableDMAReq_TX(USART1);
+
 	LL_USART_EnableIT_RXNE(USART1);
 
 	LL_USART_Enable(USART1);
@@ -99,15 +106,6 @@ void USART2_IRQHandler(void)
 				USART_RS485_RX_Ptr = 0;
 			}
 		}
-	}
-
-	if(LL_USART_IsActiveFlag_TXE(USART2) && LL_USART_IsEnabledIT_TXE(USART2))
-	{
-		while(!LL_USART_IsActiveFlag_TC(USART2));
-
-		LL_GPIO_ResetOutputPin(RS485_DRV_EN_Port, RS485_DRV_EN_Pin);//disable RS trasmitter
-
-		LL_USART_DisableIT_TXE(USART2);
 	}
 }
 
@@ -140,7 +138,7 @@ void USART1_IRQHandler(void)
 		}
 	}
 
-	while(LL_USART_IsActiveFlag_TXE(USART1))
+	/*while(LL_USART_IsActiveFlag_TXE(USART1))
 	{
 		LL_USART_TransmitData8(USART1, USART_FT232_TX_buffer[USART_FT232_TX_Ptr]);
 
@@ -152,5 +150,5 @@ void USART1_IRQHandler(void)
 		}
 
 		USART_FT232_TX_Ptr++;
-	}
+	}*/
 }

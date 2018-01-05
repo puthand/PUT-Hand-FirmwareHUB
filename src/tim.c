@@ -142,7 +142,6 @@ void TIM14_IRQHandler(void)//TIM_MotorPolling and Internal regulator
 			USART_RS485_TX_Encoded_Len++;
 
 			LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_4, USART_RS485_TX_Encoded_Len); //start USART_TX transfer
-			LL_GPIO_SetOutputPin(RS485_DRV_EN_Port, RS485_DRV_EN_Pin);
 			LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_4);
 
 			USART_RS485_State = USART_RS485_State_WAITING;
@@ -312,11 +311,16 @@ void TIM17_IRQHandler(void)//TIM_FT232
 			USART_FT232_TX_ToEncode[FT232_TX_Len++] = CrcVal;
 
 			USART_FT232_TX_Encoded_Len = b64_encode(USART_FT232_TX_ToEncode, FT232_TX_Len, USART_FT232_TX_buffer);
-			USART_RS485_TX_buffer[USART_RS485_TX_Encoded_Len] = '\n';
+			USART_FT232_TX_buffer[USART_FT232_TX_Encoded_Len] = '\n';
+			USART_FT232_TX_Encoded_Len++;
 
-			USART_FT232_TX_Ptr = 0;
 			SendingStatusState = SendingStatusState_SENDING;
-			LL_USART_EnableIT_TXE(USART1);
+			LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_2, USART_FT232_TX_Encoded_Len); //start USART_TX transfer
+			LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_2);
+
+			//USART_FT232_TX_Ptr = 0;
+			//SendingStatusState = SendingStatusState_SENDING;
+			//LL_USART_EnableIT_TXE(USART1);
 		}
 	}
 }
