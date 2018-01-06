@@ -66,7 +66,6 @@ int main(void)
 
 	//SystemOperationMode = MODE_INT_REGULATOR;
 	//CalibrationProcedure = CALIBRATION_Perform;
-
 	//SendSatusToPC = SendSatusToPC_ENABLED;
 
 	while(1)

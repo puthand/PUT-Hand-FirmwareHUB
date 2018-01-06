@@ -147,6 +147,65 @@ void USART1_IRQHandler(void)
 							case FT232_CMD_CalibrationProcedureEnable:
 								CalibrationProcedure = CALIBRATION_Perform;
 								break;
+
+							case FT232_CMD_ResetErrors:
+								for(int i=0; i<MotorDriver_Count; i++)
+								{
+									MotorDriver_List[i].ResetFaultFlag = FaultFlag_Reset;
+								}
+								CurrentError = ERROR_OK;
+								//TODO Test
+								break;
+
+							case FT232_CMD_IdleMode:
+								if(USART_FT232_RX_Decoded_Len >= 3)//if at least motor count is avaiable
+								{
+									if(USART_FT232_RX_Decoded_Len == (USART_FT232_RX_Decoded[1]*1 + 3))//if data size is ok
+									{
+										SystemOperationMode = MODE_IDLE;
+										for(int i=0; i<MotorDriver_Count; i++)
+										{
+											MotorDriver_List[i].FreeDrive = USART_FT232_RX_Decoded[2 + 1*i + 0];
+										}
+									}
+								}
+								//TODO test
+								break;
+
+							case FT232_CMD_IntRegulatorMode:
+								if(USART_FT232_RX_Decoded_Len >= 3)//if at least motor count is avaiable
+								{
+									if(USART_FT232_RX_Decoded_Len == (USART_FT232_RX_Decoded[1]*2 + 3))//if data size is ok
+									{
+										SystemOperationMode = MODE_INT_REGULATOR;
+										for(int i=0; i<MotorDriver_Count; i++)
+										{
+											((uint8_t*)&(MotorDriver_List[i].PositionSet))[0] = USART_FT232_RX_Decoded[2 + 2*i + 0];
+											((uint8_t*)&(MotorDriver_List[i].PositionSet))[1] = USART_FT232_RX_Decoded[2 + 2*i + 1];
+
+										}
+									}
+								}
+								//TODO test
+								break;
+
+							case FT232_CMD_ExtRegulatorMode:
+								if(USART_FT232_RX_Decoded_Len >= 3)//if at least motor count is avaiable
+								{
+									if(USART_FT232_RX_Decoded_Len == (USART_FT232_RX_Decoded[1]*3 + 3))//if data size is ok
+									{
+										SystemOperationMode = MODE_EXT_REGULATOR;
+										for(int i=0; i<MotorDriver_Count; i++)
+										{
+											MotorDriver_List[i].FreeDrive = USART_FT232_RX_Decoded[2 + 3*i + 0] & FreeDrive_EN;
+											MotorDriver_List[i].Direction = USART_FT232_RX_Decoded[2 + 3*i + 0] & Dir_Positive;
+											((uint8_t*)&(MotorDriver_List[i].PWM))[0] = USART_FT232_RX_Decoded[2 + 3*i + 1];
+											((uint8_t*)&(MotorDriver_List[i].PWM))[1] = USART_FT232_RX_Decoded[2 + 3*i + 2];
+										}
+									}
+								}
+								//TODO test
+								break;
 						}
 					}else
 					{
