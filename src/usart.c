@@ -62,7 +62,7 @@ void USART_FT232()
 	USART_FT232_RX_Ptr = 0;
 	USART_FT232_TX_Ptr = 0;
 
-	USART_InitStruct.BaudRate = 921600;
+	USART_InitStruct.BaudRate = 460800;
 	USART_InitStruct.DataWidth = LL_USART_DATAWIDTH_8B;
 	USART_InitStruct.StopBits = LL_USART_STOPBITS_1;
 	USART_InitStruct.Parity = LL_USART_PARITY_NONE;
