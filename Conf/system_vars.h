@@ -84,6 +84,10 @@ typedef struct
 #define MotorDriver_Count					1
 #endif
 
+#ifdef TestSetup_2
+#define MotorDriver_Count					2
+#endif
+
 #ifdef TestSetup_9
 #define MotorDriver_Count					9
 #endif
@@ -105,8 +109,8 @@ CurrentError_Type CurrentError;
 #define TIM_MotorPolling_WatchDog_Prescaler			191 //Inc 250 000 Hz
 #define TIM_MotorPolling_WatchDog_Period			249 //Rel 249 = 1 ms = 1000 Hz
 
-#define TIM_MotorCalibration_WatchDog_Prescaler		9599 //Inc 5 000 Hz
-#define TIM_MotorCalibration_WatchDog_Period		39999 //Rel 24999 = 0,2 Hz = 5s; Rel 39999 = 0,125 Hz = 7s
+#define TIM_MotorCalibration_WatchDog_Prescaler		47999 //Inc 1 000 Hz
+#define TIM_MotorCalibration_WatchDog_Period		19999 //Rel 19999 = 0,05 Hz = 20s
 
 
 typedef enum{

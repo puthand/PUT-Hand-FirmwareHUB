@@ -26,7 +26,12 @@ int main(void)
 #endif
 
 #ifdef TestSetup_1
+	MotorDriver_List[0].Address = 0x02;
+#endif
+
+#ifdef TestSetup_2
 	MotorDriver_List[0].Address = 0x01;
+	MotorDriver_List[1].Address = 0x02;
 #endif
 
 	for(int i=0; i<MotorDriver_Count; i++)
