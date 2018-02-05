@@ -8,6 +8,38 @@
 #ifndef SYSTEM_VARS_H_
 #define SYSTEM_VARS_H_
 
+//#define TestSetup_1
+#define TestSetup_2
+//#define TestSetup_9
+
+#ifdef TestSetup_1
+	#define MotorDriver_Count					1
+#endif
+
+#ifdef TestSetup_2
+	#define MotorDriver_Count					2
+#endif
+
+#ifdef TestSetup_9
+	#define MotorDriver_Count					9
+#endif
+
+#define Kp_Finger	4000
+#define Ki_Finger	50
+#define Kd_Finger	8000
+#define AWlimit_Finger 1000000
+
+
+#define Kp_Lin		1000
+#define Ki_Lin		50
+#define Kd_Lin		1000
+#define AWlimit_Lin 1000000
+
+#define Kp_Thumb	1000
+#define Ki_Thumb	50
+#define Kd_Thumb	1000
+#define AWlimit_Thumb 1000000
+
 typedef enum
 {
 	SET_PWM_ = 0x01,
@@ -75,22 +107,10 @@ typedef struct
 	int32_t						PID_Kp;
 	int32_t						PID_Ki;
 	int32_t						PID_Kd;
+	int32_t						PID_AWlimit;
 	int32_t						PID_Integral;
 	int32_t						PID_PrevErr;
 }MotorDriver_Type;
-
-
-#ifdef TestSetup_1
-#define MotorDriver_Count					1
-#endif
-
-#ifdef TestSetup_2
-#define MotorDriver_Count					2
-#endif
-
-#ifdef TestSetup_9
-#define MotorDriver_Count					9
-#endif
 
 volatile MotorDriver_Type MotorDriver_List[MotorDriver_Count];
 volatile MotorDriver_Type* MotorDriver_Polling;

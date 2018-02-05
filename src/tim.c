@@ -160,6 +160,11 @@ void TIM14_IRQHandler(void)//TIM_MotorPolling and Internal regulator
 				{
 					PID_Err = MotorDriver_Polling->PositionSet - MotorDriver_Polling->PositionCurrent;
 					MotorDriver_Polling->PID_Integral += PID_Err;
+					if((MotorDriver_Polling->PID_Integral > MotorDriver_Polling->PID_AWlimit) || (MotorDriver_Polling->PID_Integral < -MotorDriver_Polling->PID_AWlimit))
+					{
+						MotorDriver_Polling->PID_Integral -= PID_Err;
+					}
+
 					PID_Result = 0;
 
 					PID_Result += MotorDriver_Polling->PID_Kp * PID_Err / 1000;

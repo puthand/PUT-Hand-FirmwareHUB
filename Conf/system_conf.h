@@ -8,10 +8,6 @@
 #ifndef SYSTEM_CONF_H_
 #define SYSTEM_CONF_H_
 
-//#define TestSetup_9
-//#define TestSetup_1
-#define TestSetup_2
-
 #include "stm32f0xx.h"
 
 #include "stm32f0xx_ll_adc.h"

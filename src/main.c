@@ -10,32 +10,38 @@
 
 #include "main.h"
 
-int main(void)
-{
-	MotorDriver_Polling = MotorDriver_List;
-#ifdef TestSetup_9
-	MotorDriver_List[0].Address = 0x01;
-	MotorDriver_List[1].Address = 0x01;
-	MotorDriver_List[2].Address = 0x01;
-	MotorDriver_List[3].Address = 0x01;
-	MotorDriver_List[4].Address = 0x01;
-	MotorDriver_List[5].Address = 0x01;
-	MotorDriver_List[6].Address = 0x01;
-	MotorDriver_List[7].Address = 0x01;
-	MotorDriver_List[8].Address = 0x01;
-#endif
-
 #ifdef TestSetup_1
-	MotorDriver_List[0].Address = 0x02;
+	const uint8_t drvList_Finger[] = {0};
+	const uint8_t drvList_Lin[] = {};
+	const uint8_t drvList_Thumb[] = {};
+
+	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x01};
 #endif
 
 #ifdef TestSetup_2
-	MotorDriver_List[0].Address = 0x01;
-	MotorDriver_List[1].Address = 0x02;
+	const uint8_t drvList_Finger[] = {0, 1};
+	const uint8_t drvList_Lin[] = {};
+	const uint8_t drvList_Thumb[] = {};
+
+	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x01, 0x02};
 #endif
+
+#ifdef TestSetup_9
+	const uint8_t drvList_Finger[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+	const uint8_t drvList_Lin[] = {};
+	const uint8_t drvList_Thumb[] = {};
+
+	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
+#endif
+
+int main(void)
+{
+	MotorDriver_Polling = MotorDriver_List;
 
 	for(int i=0; i<MotorDriver_Count; i++)
 	{
+		MotorDriver_List[i].Address = drvList_Addresses[i];
+
 		MotorDriver_List[i].PWM = 0;
 		MotorDriver_List[i].Direction = Dir_Positive;
 		MotorDriver_List[i].FreeDrive = FreeDrive_DIS;
@@ -47,9 +53,34 @@ int main(void)
 
 		MotorDriver_List[i].PID_Integral = 0;
 		MotorDriver_List[i].PID_PrevErr = 0;
-		MotorDriver_List[i].PID_Kp = 1000;
-		MotorDriver_List[i].PID_Ki = 50;
-		MotorDriver_List[i].PID_Kd = 1000;
+		MotorDriver_List[i].PID_Kp = 0;
+		MotorDriver_List[i].PID_Ki = 0;
+		MotorDriver_List[i].PID_Kd = 0;
+		MotorDriver_List[i].PID_AWlimit = 0;
+	}
+
+	for(int i=0; i<sizeof(drvList_Finger); i++)
+	{
+		MotorDriver_List[drvList_Finger[i]].PID_Kp = Kp_Finger;
+		MotorDriver_List[drvList_Finger[i]].PID_Ki = Ki_Finger;
+		MotorDriver_List[drvList_Finger[i]].PID_Kd = Kd_Finger;
+		MotorDriver_List[drvList_Finger[i]].PID_AWlimit = AWlimit_Finger;
+	}
+
+	for(int i=0; i<sizeof(drvList_Lin); i++)
+	{
+		MotorDriver_List[drvList_Lin[i]].PID_Kp = Kp_Lin;
+		MotorDriver_List[drvList_Lin[i]].PID_Ki = Ki_Lin;
+		MotorDriver_List[drvList_Lin[i]].PID_Kd = Kd_Lin;
+		MotorDriver_List[drvList_Lin[i]].PID_AWlimit = AWlimit_Lin;
+	}
+
+	for(int i=0; i<sizeof(drvList_Thumb); i++)
+	{
+		MotorDriver_List[drvList_Thumb[i]].PID_Kp = Kp_Thumb;
+		MotorDriver_List[drvList_Thumb[i]].PID_Ki = Ki_Thumb;
+		MotorDriver_List[drvList_Thumb[i]].PID_Kd = Kd_Thumb;
+		MotorDriver_List[drvList_Thumb[i]].PID_AWlimit = AWlimit_Thumb;
 	}
 
 	CurrentError = ERROR_OK;
