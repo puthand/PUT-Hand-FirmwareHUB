@@ -18,12 +18,12 @@
 	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x01};
 #endif
 
-#ifdef TestSetup_2
-	const uint8_t drvList_Finger[] = {0, 1};
-	const uint8_t drvList_Lin[] = {};
+#ifdef TestSetup_3
+	const uint8_t drvList_Finger[] = {0, 2};
+	const uint8_t drvList_Lin[] = {1};
 	const uint8_t drvList_Thumb[] = {};
 
-	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x01, 0x02};
+	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x02, 0x03, 0x04};
 #endif
 
 #ifdef TestSetup_9
@@ -32,6 +32,14 @@
 	const uint8_t drvList_Thumb[] = {};
 
 	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
+#endif
+
+#ifdef Pazdzierz_One
+	const uint8_t drvList_Finger[] = {1, 2, 4, 6};
+	const uint8_t drvList_Lin[] = {3, 5};
+	const uint8_t drvList_Thumb[] = {0};
+
+	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x07, 0x04, 0x05, 0x03, 0x02, 0x06, 0x01};
 #endif
 
 int main(void)

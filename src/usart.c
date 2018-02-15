@@ -145,7 +145,7 @@ void USART1_IRQHandler(void)
 								break;
 
 							case FT232_CMD_CalibrationProcedureEnable:
-								CalibrationProcedure = CALIBRATION_Perform;
+								CalibrationProcedure = CALIBRATION_Perform_NextCycle;
 								break;
 
 							case FT232_CMD_ResetErrors:
@@ -154,7 +154,6 @@ void USART1_IRQHandler(void)
 									MotorDriver_List[i].ResetFaultFlag = FaultFlag_Reset;
 								}
 								CurrentError = ERROR_OK;
-								//TODO Test
 								break;
 
 							case FT232_CMD_IdleMode:
@@ -169,7 +168,6 @@ void USART1_IRQHandler(void)
 										}
 									}
 								}
-								//TODO test
 								break;
 
 							case FT232_CMD_IntRegulatorMode:
@@ -186,7 +184,6 @@ void USART1_IRQHandler(void)
 										}
 									}
 								}
-								//TODO test
 								break;
 
 							case FT232_CMD_ExtRegulatorMode:
@@ -204,7 +201,6 @@ void USART1_IRQHandler(void)
 										}
 									}
 								}
-								//TODO test
 								break;
 						}
 					}else

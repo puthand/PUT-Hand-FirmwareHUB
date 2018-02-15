@@ -91,7 +91,7 @@ void TIM14_IRQHandler(void)//TIM_MotorPolling and Internal regulator
 	{
 		LL_TIM_ClearFlag_UPDATE(TIM14);
 
-		if(CalibrationProcedure == CALIBRATION_Perform) //if calibration procedure change watchdog to 5s
+		if(CalibrationProcedure == CALIBRATION_Perform_NextCycle) //if calibration procedure change watchdog to 5s
 		{
 			LL_TIM_SetPrescaler(TIM15, TIM_MotorCalibration_WatchDog_Prescaler);
 			LL_TIM_SetAutoReload(TIM15, TIM_MotorCalibration_WatchDog_Period);
@@ -100,6 +100,8 @@ void TIM14_IRQHandler(void)//TIM_MotorPolling and Internal regulator
 			LL_TIM_GenerateEvent_UPDATE(TIM15);
 			LL_TIM_ClearFlag_UPDATE(TIM15);
 			LL_TIM_EnableIT_UPDATE(TIM15);
+
+			CalibrationProcedure = CALIBRATION_Perform;
 		}
 
 		//polling all connected motor drivers, and setting current data
@@ -107,7 +109,7 @@ void TIM14_IRQHandler(void)//TIM_MotorPolling and Internal regulator
 		{
 			MotorDriver_Polling = &(MotorDriver_List[i]);
 
-			if(CalibrationProcedure == CALIBRATION_Disabled)//if standard polling
+			if(CalibrationProcedure != CALIBRATION_Perform)//if standard polling
 			{
 				USART_RS485_TX_ToEncode[0] = MotorDriver_Polling->Address;
 				USART_RS485_TX_ToEncode[1] = SET_PWM_;

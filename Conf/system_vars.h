@@ -9,36 +9,42 @@
 #define SYSTEM_VARS_H_
 
 //#define TestSetup_1
-#define TestSetup_2
+//#define TestSetup_3
 //#define TestSetup_9
+
+#define Pazdzierz_One
 
 #ifdef TestSetup_1
 	#define MotorDriver_Count					1
 #endif
 
-#ifdef TestSetup_2
-	#define MotorDriver_Count					2
+#ifdef TestSetup_3
+	#define MotorDriver_Count					3
 #endif
 
 #ifdef TestSetup_9
 	#define MotorDriver_Count					9
 #endif
 
-#define Kp_Finger	4000
+#ifdef Pazdzierz_One
+	#define MotorDriver_Count					7
+#endif
+
+#define Kp_Finger	2000
 #define Ki_Finger	50
 #define Kd_Finger	8000
-#define AWlimit_Finger 1000000
+#define AWlimit_Finger 100000
 
 
-#define Kp_Lin		1000
-#define Ki_Lin		50
-#define Kd_Lin		1000
-#define AWlimit_Lin 1000000
+#define Kp_Lin		6000
+#define Ki_Lin		150
+#define Kd_Lin		8000
+#define AWlimit_Lin 100000
 
-#define Kp_Thumb	1000
+#define Kp_Thumb	4000
 #define Ki_Thumb	50
-#define Kd_Thumb	1000
-#define AWlimit_Thumb 1000000
+#define Kd_Thumb	8000
+#define AWlimit_Thumb 100000
 
 typedef enum
 {
@@ -143,7 +149,8 @@ SystemOperationMode_Type SystemOperationMode;
 
 typedef enum{
 	CALIBRATION_Disabled,
-	CALIBRATION_Perform
+	CALIBRATION_Perform,
+	CALIBRATION_Perform_NextCycle
 }CalibrationProcedure_Type;
 
 volatile CalibrationProcedure_Type CalibrationProcedure;
