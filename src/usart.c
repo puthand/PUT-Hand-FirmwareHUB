@@ -159,7 +159,7 @@ void USART1_IRQHandler(void)
 							case FT232_CMD_IdleMode:
 								if(USART_FT232_RX_Decoded_Len >= 3)//if at least motor count is avaiable
 								{
-									if(USART_FT232_RX_Decoded_Len == (USART_FT232_RX_Decoded[1]*1 + 3))//if data size is ok
+									if(USART_FT232_RX_Decoded_Len == (USART_FT232_RX_Decoded[1]*1 + 3) && USART_FT232_RX_Decoded[1] == MotorDriver_Count)//if data size is ok
 									{
 										SystemOperationMode = MODE_IDLE;
 										for(int i=0; i<MotorDriver_Count; i++)
@@ -173,7 +173,7 @@ void USART1_IRQHandler(void)
 							case FT232_CMD_IntRegulatorMode:
 								if(USART_FT232_RX_Decoded_Len >= 3)//if at least motor count is avaiable
 								{
-									if(USART_FT232_RX_Decoded_Len == (USART_FT232_RX_Decoded[1]*2 + 3))//if data size is ok
+									if(USART_FT232_RX_Decoded_Len == (USART_FT232_RX_Decoded[1]*2 + 3) && USART_FT232_RX_Decoded[1] == MotorDriver_Count)//if data size is ok
 									{
 										SystemOperationMode = MODE_INT_REGULATOR;
 										for(int i=0; i<MotorDriver_Count; i++)
@@ -189,7 +189,7 @@ void USART1_IRQHandler(void)
 							case FT232_CMD_ExtRegulatorMode:
 								if(USART_FT232_RX_Decoded_Len >= 3)//if at least motor count is avaiable
 								{
-									if(USART_FT232_RX_Decoded_Len == (USART_FT232_RX_Decoded[1]*3 + 3))//if data size is ok
+									if(USART_FT232_RX_Decoded_Len == (USART_FT232_RX_Decoded[1]*3 + 3) && USART_FT232_RX_Decoded[1] == MotorDriver_Count)//if data size is ok
 									{
 										SystemOperationMode = MODE_EXT_REGULATOR;
 										for(int i=0; i<MotorDriver_Count; i++)

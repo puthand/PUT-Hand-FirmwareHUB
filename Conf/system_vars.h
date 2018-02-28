@@ -136,7 +136,7 @@ CurrentError_Type CurrentError;
 #define TIM_MotorPolling_WatchDog_Period			249 //Rel 249 = 1 ms = 1000 Hz
 
 #define TIM_MotorCalibration_WatchDog_Prescaler		47999 //Inc 1 000 Hz
-#define TIM_MotorCalibration_WatchDog_Period		19999 //Rel 19999 = 0,05 Hz = 20s
+#define TIM_MotorCalibration_WatchDog_Period		24999 //Rel 24999 = 0,04 Hz = 25s
 
 
 typedef enum{
