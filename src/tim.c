@@ -85,6 +85,8 @@ static uint8_t USART_RS485_TX_Encoded_Len;
 volatile static int32_t PID_Err;
 volatile static int32_t PID_Result;
 
+volatile int32_t DEB_pid_err, DEB_pid_int, DEB_pid_set, DEB_pid_curr, DEB_pid_res;
+
 void TIM14_IRQHandler(void)//TIM_MotorPolling and Internal regulator
 {
 	if(LL_TIM_IsActiveFlag_UPDATE(TIM14))
@@ -161,6 +163,11 @@ void TIM14_IRQHandler(void)//TIM_MotorPolling and Internal regulator
 				}else if(SystemOperationMode == MODE_INT_REGULATOR)
 				{
 					PID_Err = MotorDriver_Polling->PositionSet - MotorDriver_Polling->PositionCurrent;
+					if(abs(PID_Err) <= 1000)
+					{
+						PID_Err = 0;
+						MotorDriver_Polling->PID_Integral = 0;
+					}
 					MotorDriver_Polling->PID_Integral += PID_Err;
 					if((MotorDriver_Polling->PID_Integral > MotorDriver_Polling->PID_AWlimit) || (MotorDriver_Polling->PID_Integral < -MotorDriver_Polling->PID_AWlimit))
 					{
@@ -191,6 +198,15 @@ void TIM14_IRQHandler(void)//TIM_MotorPolling and Internal regulator
 
 					MotorDriver_Polling->PWM = PID_Result;
 					MotorDriver_Polling->FreeDrive = FreeDrive_DIS;
+
+					if(MotorDriver_Polling->Address == 0x03)
+					{
+						DEB_pid_err = PID_Err;
+						DEB_pid_int = MotorDriver_Polling->PID_Integral;
+						DEB_pid_curr = MotorDriver_Polling->PositionCurrent;
+						DEB_pid_set = MotorDriver_Polling->PositionSet;
+						DEB_pid_res = PID_Result;
+					}
 				}
 			}
 
