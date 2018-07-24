@@ -11,8 +11,9 @@
 //#define TestSetup_1
 //#define TestSetup_3
 //#define TestSetup_9
+#define TestSetup_UnderAct
 
-#define Pazdzierz_One
+//#define Pazdzierz_One
 
 #ifdef TestSetup_1
 	#define MotorDriver_Count					1
@@ -26,15 +27,22 @@
 	#define MotorDriver_Count					9
 #endif
 
+#ifdef TestSetup_UnderAct
+	#define MotorDriver_Count					2
+#endif
+
 #ifdef Pazdzierz_One
 	#define MotorDriver_Count					7
 #endif
 
-#define Kp_Finger	2000
-#define Ki_Finger	50
-#define Kd_Finger	8000
+//#define Kp_Finger	2000 <- Real Values to use!!
+//#define Ki_Finger	50
+//#define Kd_Finger	8000
+//#define AWlimit_Finger 100000
+#define Kp_Finger	500
+#define Ki_Finger	20
+#define Kd_Finger	4000
 #define AWlimit_Finger 100000
-
 
 #define Kp_Lin		6000
 #define Ki_Lin		150
@@ -98,6 +106,8 @@ typedef enum
 	Operation_Fault = 0x04
 }MotorDriverOperation_Type;
 
+#define PositionCurrent_Count_Max			3
+
 typedef struct
 {
 	uint8_t 					Address;
@@ -105,7 +115,8 @@ typedef struct
 	Direction_Type				Direction;
 	FreeDrive_Type				FreeDrive;
 	uint16_t					Current;
-	uint16_t					PositionCurrent;
+	uint8_t						PositionCurrent_Count;
+	uint16_t					PositionCurrent[PositionCurrent_Count_Max];
 	uint16_t					PositionSet;
 	MotorDriverOperation_Type	MotorDriverOperation;
 	ResetFaultFlag_Type			ResetFaultFlag;

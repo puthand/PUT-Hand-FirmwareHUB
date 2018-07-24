@@ -34,6 +34,14 @@
 	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
 #endif
 
+#ifdef TestSetup_UnderAct
+	const uint8_t drvList_Finger[] = {0, 1};//, 2, 3, 4, 5, 6, 7, 8};
+	const uint8_t drvList_Lin[] = {};
+	const uint8_t drvList_Thumb[] = {};
+
+	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x01, 0x02};//0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};
+#endif
+
 #ifdef Pazdzierz_One
 	const uint8_t drvList_Finger[] = {1, 2, 4, 6};
 	const uint8_t drvList_Lin[] = {3, 5};
@@ -54,7 +62,11 @@ int main(void)
 		MotorDriver_List[i].Direction = Dir_Positive;
 		MotorDriver_List[i].FreeDrive = FreeDrive_DIS;
 		MotorDriver_List[i].Current = 0;
-		MotorDriver_List[i].PositionCurrent = 0;
+		MotorDriver_List[i].PositionCurrent_Count = 1;
+		for(int p=0; p<PositionCurrent_Count_Max; p++)
+		{
+			MotorDriver_List[i].PositionCurrent[p] = 0;
+		}
 		MotorDriver_List[i].PositionSet = 20000;
 		MotorDriver_List[i].MotorDriverOperation = Operation_OK;
 		MotorDriver_List[i].ResetFaultFlag = FaultFlag_Keep;

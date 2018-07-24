@@ -85,7 +85,7 @@ static uint8_t USART_RS485_TX_Encoded_Len;
 volatile static int32_t PID_Err;
 volatile static int32_t PID_Result;
 
-volatile int32_t DEB_pid_err, DEB_pid_int, DEB_pid_set, DEB_pid_curr, DEB_pid_res;
+//volatile int32_t DEB_pid_err, DEB_pid_int, DEB_pid_set, DEB_pid_curr, DEB_pid_res;
 
 void TIM14_IRQHandler(void)//TIM_MotorPolling and Internal regulator
 {
@@ -162,7 +162,7 @@ void TIM14_IRQHandler(void)//TIM_MotorPolling and Internal regulator
 					}
 				}else if(SystemOperationMode == MODE_INT_REGULATOR)
 				{
-					PID_Err = MotorDriver_Polling->PositionSet - MotorDriver_Polling->PositionCurrent;
+					PID_Err = MotorDriver_Polling->PositionSet - MotorDriver_Polling->PositionCurrent[0];
 					if(abs(PID_Err) <= 1000)
 					{
 						PID_Err = 0;
@@ -199,14 +199,14 @@ void TIM14_IRQHandler(void)//TIM_MotorPolling and Internal regulator
 					MotorDriver_Polling->PWM = PID_Result;
 					MotorDriver_Polling->FreeDrive = FreeDrive_DIS;
 
-					if(MotorDriver_Polling->Address == 0x03)
+					/*if(MotorDriver_Polling->Address == 0x03)
 					{
 						DEB_pid_err = PID_Err;
 						DEB_pid_int = MotorDriver_Polling->PID_Integral;
-						DEB_pid_curr = MotorDriver_Polling->PositionCurrent;
+						DEB_pid_curr = MotorDriver_Polling->PositionCurrent[0];
 						DEB_pid_set = MotorDriver_Polling->PositionSet;
 						DEB_pid_res = PID_Result;
-					}
+					}*/
 				}
 			}
 
@@ -234,15 +234,22 @@ void TIM14_IRQHandler(void)//TIM_MotorPolling and Internal regulator
 								{
 									case SET_PWM_: //new status
 									case GET_STATE_:
-										((uint8_t*)&(MotorDriver_Polling->Current))[0] = USART_RS485_RX_Decoded[2];
-										((uint8_t*)&(MotorDriver_Polling->Current))[1] = USART_RS485_RX_Decoded[3];
-										((uint8_t*)&(MotorDriver_Polling->PositionCurrent))[0] = USART_RS485_RX_Decoded[4];
-										((uint8_t*)&(MotorDriver_Polling->PositionCurrent))[1] = USART_RS485_RX_Decoded[5];
-										MotorDriver_Polling->MotorDriverOperation = USART_RS485_RX_Decoded[6];
+										MotorDriver_Polling->MotorDriverOperation = USART_RS485_RX_Decoded[2] & 0x0F;
 										if(MotorDriver_Polling->MotorDriverOperation == Operation_Fault)
 										{
 											ErrorIndicatorEnable(ERROR_MOTOR_FAULT);
 										}
+
+										((uint8_t*)&(MotorDriver_Polling->Current))[0] = USART_RS485_RX_Decoded[3];
+										((uint8_t*)&(MotorDriver_Polling->Current))[1] = USART_RS485_RX_Decoded[4];
+
+										MotorDriver_Polling->PositionCurrent_Count = (USART_RS485_RX_Decoded[2] & 0xF0) >> 4;
+										for(int p=0; p<MotorDriver_Polling->PositionCurrent_Count; p++)
+										{
+											((uint8_t*)&(MotorDriver_Polling->PositionCurrent[p]))[0] = USART_RS485_RX_Decoded[2*p+5];
+											((uint8_t*)&(MotorDriver_Polling->PositionCurrent[p]))[1] = USART_RS485_RX_Decoded[2*p+6];
+										}
+
 										break;
 									case CALIBRATE_:
 										break;
@@ -319,10 +326,15 @@ void TIM17_IRQHandler(void)//TIM_FT232
 				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->PWM))[1];
 				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->PositionSet))[0];
 				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->PositionSet))[1];
-				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->PositionCurrent))[0];
-				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->PositionCurrent))[1];
 				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->Current))[0];
 				USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->Current))[1];
+				USART_FT232_TX_ToEncode[FT232_TX_Len++] = Driver->PositionCurrent_Count;
+				for(int p=0; p<Driver->PositionCurrent_Count; p++)
+				{
+					USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->PositionCurrent[p]))[0];
+					USART_FT232_TX_ToEncode[FT232_TX_Len++] = ((uint8_t*)&(Driver->PositionCurrent[p]))[1];
+				}
+
 			}
 
 			uint8_t CrcVal = 0x00;
