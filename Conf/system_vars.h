@@ -35,24 +35,25 @@
 	#define MotorDriver_Count					7
 #endif
 
-//#define Kp_Finger	2000 <- Real Values to use!!
-//#define Ki_Finger	50
-//#define Kd_Finger	8000
-//#define AWlimit_Finger 100000
-#define Kp_Finger	500
-#define Ki_Finger	20
-#define Kd_Finger	4000
-#define AWlimit_Finger 100000
+#define Kp_Finger				2000
+#define Ki_Finger				50
+#define Kd_Finger				8000
+#define AWlimit_Finger 			100000
 
-#define Kp_Lin		6000
-#define Ki_Lin		150
-#define Kd_Lin		8000
-#define AWlimit_Lin 100000
+#define Kp_Lin					6000
+#define Ki_Lin					150
+#define Kd_Lin					8000
+#define AWlimit_Lin 			100000
 
-#define Kp_Thumb	4000
-#define Ki_Thumb	50
-#define Kd_Thumb	8000
-#define AWlimit_Thumb 100000
+#define Kp_Thumb				4000
+#define Ki_Thumb				50
+#define Kd_Thumb				8000
+#define AWlimit_Thumb 			100000
+
+#define Kp_Underactuated		500
+#define Ki_Underactuated		20
+#define Kd_Underactuated		4000
+#define AWlimit_Underactuated 	100000
 
 typedef enum
 {

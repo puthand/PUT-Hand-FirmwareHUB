@@ -14,6 +14,7 @@
 	const uint8_t drvList_Finger[] = {0};
 	const uint8_t drvList_Lin[] = {};
 	const uint8_t drvList_Thumb[] = {};
+	const uint8_t drvList_Underactuated[] = {};
 
 	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x01};
 #endif
@@ -22,6 +23,7 @@
 	const uint8_t drvList_Finger[] = {0, 2};
 	const uint8_t drvList_Lin[] = {1};
 	const uint8_t drvList_Thumb[] = {};
+	const uint8_t drvList_Underactuated[] = {};
 
 	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x02, 0x03, 0x04};
 #endif
@@ -30,22 +32,25 @@
 	const uint8_t drvList_Finger[] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 	const uint8_t drvList_Lin[] = {};
 	const uint8_t drvList_Thumb[] = {};
+	const uint8_t drvList_Underactuated[] = {};
 
 	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};
 #endif
 
 #ifdef TestSetup_UnderAct
-	const uint8_t drvList_Finger[] = {0, 1};//, 2, 3, 4, 5, 6, 7, 8};
+	const uint8_t drvList_Finger[] = {1};
 	const uint8_t drvList_Lin[] = {};
 	const uint8_t drvList_Thumb[] = {};
+	const uint8_t drvList_Underactuated[] = {0};
 
-	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x01, 0x02};//0x01, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};
+	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x01, 0x02};
 #endif
 
 #ifdef Pazdzierz_One
 	const uint8_t drvList_Finger[] = {1, 2, 4, 6};
 	const uint8_t drvList_Lin[] = {3, 5};
 	const uint8_t drvList_Thumb[] = {0};
+	const uint8_t drvList_Underactuated[] = {};
 
 	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x07, 0x04, 0x05, 0x03, 0x02, 0x06, 0x01};
 #endif
@@ -102,6 +107,15 @@ int main(void)
 		MotorDriver_List[drvList_Thumb[i]].PID_Kd = Kd_Thumb;
 		MotorDriver_List[drvList_Thumb[i]].PID_AWlimit = AWlimit_Thumb;
 	}
+
+	for(int i=0; i<sizeof(drvList_Underactuated); i++)
+	{
+		MotorDriver_List[drvList_Underactuated[i]].PID_Kp = Kp_Underactuated;
+		MotorDriver_List[drvList_Underactuated[i]].PID_Ki = Ki_Underactuated;
+		MotorDriver_List[drvList_Underactuated[i]].PID_Kd = Kd_Underactuated;
+		MotorDriver_List[drvList_Underactuated[i]].PID_AWlimit = AWlimit_Underactuated;
+	}
+
 
 	CurrentError = ERROR_OK;
 	CalibrationProcedure = CALIBRATION_Disabled;
