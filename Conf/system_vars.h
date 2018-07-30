@@ -107,7 +107,7 @@ typedef enum
 	Operation_Fault = 0x04
 }MotorDriverOperation_Type;
 
-#define PositionCurrent_Count_Max			3
+#define PositionCurrent_Count_Max			4
 
 typedef struct
 {
