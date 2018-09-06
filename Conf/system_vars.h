@@ -11,9 +11,11 @@
 //#define TestSetup_1
 //#define TestSetup_3
 //#define TestSetup_9
-#define TestSetup_UnderAct
+//#define TestSetup
 
 //#define Pazdzierz_One
+
+#define Pazdzierz_Two
 
 #ifdef TestSetup_1
 	#define MotorDriver_Count					1
@@ -27,12 +29,16 @@
 	#define MotorDriver_Count					9
 #endif
 
-#ifdef TestSetup_UnderAct
+#ifdef TestSetup
 	#define MotorDriver_Count					2
 #endif
 
 #ifdef Pazdzierz_One
 	#define MotorDriver_Count					7
+#endif
+
+#ifdef Pazdzierz_Two
+	#define MotorDriver_Count					9
 #endif
 
 #define Kp_Finger				2000
@@ -50,9 +56,9 @@
 #define Kd_Thumb				8000
 #define AWlimit_Thumb 			100000
 
-#define Kp_Underactuated		500
-#define Ki_Underactuated		20
-#define Kd_Underactuated		4000
+#define Kp_Underactuated		4000
+#define Ki_Underactuated		80
+#define Kd_Underactuated		8000
 #define AWlimit_Underactuated 	100000
 
 typedef enum
