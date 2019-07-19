@@ -46,7 +46,7 @@
 	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x04, 0x05};
 #endif
 
-#ifdef Pazdzierz_One
+#ifdef putHand_v1
 	const uint8_t drvList_Finger[] = {1, 2, 4, 6};
 	const uint8_t drvList_Lin[] = {3, 5};
 	const uint8_t drvList_Thumb[] = {0};
@@ -55,7 +55,7 @@
 	const uint8_t drvList_Addresses[MotorDriver_Count] = {0x07, 0x04, 0x05, 0x03, 0x02, 0x06, 0x01};
 #endif
 
-#ifdef Pazdzierz_Two
+#ifdef putHand_v2
 	const uint8_t drvList_Finger[] = {1, 2, 4, 6};
 	const uint8_t drvList_Lin[] = {3, 5};
 	const uint8_t drvList_Thumb[] = {0};

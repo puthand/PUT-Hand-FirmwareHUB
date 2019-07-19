@@ -13,9 +13,9 @@
 //#define TestSetup_9
 //#define TestSetup
 
-//#define Pazdzierz_One
+//#define putHand_v1
 
-#define Pazdzierz_Two
+#define putHand_v2
 
 #ifdef TestSetup_1
 	#define MotorDriver_Count					1
@@ -33,11 +33,11 @@
 	#define MotorDriver_Count					2
 #endif
 
-#ifdef Pazdzierz_One
+#ifdef putHand_v1
 	#define MotorDriver_Count					7
 #endif
 
-#ifdef Pazdzierz_Two
+#ifdef putHand_v2
 	#define MotorDriver_Count					9
 #endif
 
