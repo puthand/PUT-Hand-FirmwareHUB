@@ -1,5 +1,7 @@
 # PUT-Hand-Firmware-HUB
 
-HUB (STM32F0) firmware for open-source putHand gripper
+HUB (STM32F0) firmware for open-source PUT-Hand gripper
 
-## About
+## Acknowledgments
+
+* base64.c by Joe DF, MIT License - https://github.com/joedf/base64.c
