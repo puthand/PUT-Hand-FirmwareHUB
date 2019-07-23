@@ -19,6 +19,7 @@ PUT-Hand-Firmware-HUB repository contains firmware (STM32F0) for HUB unit - inte
 ## Tools
 
 * SW4STM32 - System Workbench for STM32 - <http://www.openstm32.org>
+* ST-LINK/V2 or compatible emulator
 
 ## Usage
 
