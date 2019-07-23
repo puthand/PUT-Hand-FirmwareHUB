@@ -39,3 +39,9 @@ const uint8_t drvList_Addresses[MotorDriver_Count] =  { .... };
 ## License
 
 Unless stated otherwise, PUT-Hand project elements are licensed under a [Creative Commons Attribution-NonCommercial 4.0 International](https://creativecommons.org/licenses/by-nc/4.0/) (CC BY-NC 4.0). Accompanying firmware and software are licensed under a [MIT License](https://opensource.org/licenses/MIT).
+
+When using PUT-Hand design files, firmware, software, or utilising project as a whole please cite:
+
+```plaintext
+TBD
+```
