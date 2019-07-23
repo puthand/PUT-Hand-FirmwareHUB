@@ -6,6 +6,8 @@ PUT-Hand is an open-source project of a 5-finger anhomomorphic gripper. PUT-Hand
 
 PUT-Hand-Firmware-HUB repository contains firmware (STM32F0) for HUB unit - integration unit serving as a bridge between each separate DRIVER and high-level controller.
 
+![alt text](./images/PUT-Hand-HUB.png)
+
 ### HUB schematics
 
 <https://github.com/puthand/PUT-Hand-PCB/blob/master/PUT-Hand-HUB.PDF>
